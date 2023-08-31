@@ -1,0 +1,299 @@
+"use client";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+
+export default function Login() {
+  const params = useSearchParams();
+
+  const [authState, setAuthState] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<loginErrorType>({});
+
+  const submitForm = async () => {
+    setLoading(true);
+    await axios
+      .post("api/auth/login", authState)
+      .then((res) => {
+        signIn("credentials", {
+          email: authState.email,
+          password: authState.password,
+          callbackUrl: "/",
+          redirect: true,
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setErrors(err.response.data);
+      });
+  };
+
+  // github sign in
+  const githubSignIn = async () => {
+    await signIn("github", { callbackUrl: "/", redirect: true });
+  };
+  // google sign in
+  const googleSignIn = async () => {
+    await signIn("google", { callbackUrl: "/", redirect: true });
+  };
+  // facebook sign in
+  const facebookSignIn = async () => {
+    await signIn("facebook", { callbackUrl: "/", redirect: true });
+  };
+
+  return (
+    <section>
+      <div className="grid grid-cols-1 lg:grid-cols-2 h-screen">
+        <div className="relative flex items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+          <div className="absolute inset-0">
+            <img
+              className="h-full w-full rounded-md object-cover object-top"
+              src="https://images.unsplash.com/photo-1576702438167-5341af8f0c13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"
+              alt=""
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+          <div className="relative">
+            <div className="w-full max-w-xl xl:mx-auto xl:w-full xl:max-w-xl xl:pr-24">
+              <h3 className="text-4xl font-bold text-white">
+                Now you dont have to rely on your designer to create a new page
+              </h3>
+              <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Commercial License
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Unlimited Exports
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    120+ Coded Blocks
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Design Files Included
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+          <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
+            <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
+              Sign in
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Don&apos;t have an account?
+              <Link
+                href="/register"
+                title=""
+                className="font-semibold text-black transition-all duration-200 hover:underline"
+              >
+                Create a free account
+              </Link>
+            </p>
+            {params.get("message") ? (
+              <p className="bg-green-400 font-bold rounder-md p-4">
+                {params?.get("message")}
+              </p>
+            ) : (
+              <></>
+            )}
+            <form action="#" method="POST" className="mt-8">
+              <div className="space-y-5">
+                <div>
+                  <label
+                    htmlFor=""
+                    className="text-base font-medium text-gray-900"
+                  >
+                    Email address
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                      type="email"
+                      placeholder="Email"
+                      onChange={(e) =>
+                        setAuthState({ ...authState, email: e.target.value })
+                      }
+                    ></input>
+                    <span className="text-red-500 font-blod">
+                      {errors?.email}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor=""
+                      className="text-base font-medium text-gray-900"
+                    >
+                      Password
+                    </label>
+                  </div>
+                  <div className="mt-2">
+                    <input
+                      className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) =>
+                        setAuthState({ ...authState, password: e.target.value })
+                      }
+                    ></input>
+                    <span className="text-red-500 font-blod">
+                      {errors?.password}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    className={`inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80`}
+                    onClick={submitForm}
+                  >
+                    {loading ? "Proseccing" : "Login"}
+                  </button>
+                </div>
+              </div>
+            </form>
+            <p className="my-3 text-center">-- or --</p>
+
+            <div className="mt-3 space-y-3">
+              <button
+                type="button"
+                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                onClick={githubSignIn}
+              >
+                <span className="mr-2 inline-block">
+                  <svg
+                    width="20"
+                    height="20"
+                    aria-hidden="true"
+                    className="octicon octicon-mark-github"
+                    data-view-component="true"
+                    version="1.1"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
+                  </svg>
+                </span>
+                Sign in with Github
+              </button>
+              <button
+                type="button"
+                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                onClick={googleSignIn}
+              >
+                <span className="mr-2 inline-block">
+                  <svg
+                    className="h-6 w-6 text-rose-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
+                  </svg>
+                </span>
+                Sign in with Google
+              </button>
+              <button
+                type="button"
+                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                onClick={facebookSignIn}
+              >
+                <span className="mr-2 inline-block">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#039be5"
+                      d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
+                    ></path>
+                  </svg>
+                </span>
+                Sign in with Facebook
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
